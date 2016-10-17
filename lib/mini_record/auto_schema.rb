@@ -292,7 +292,7 @@ module MiniRecord
           clear_tables!(dry_run)
         else
           # If table doesn't exist, create it
-          unless connection.tables.include?(table_name)
+          unless connection.data_sources.include?(table_name)
             class << connection; attr_accessor :table_definition; end unless connection.respond_to?(:table_definition=)
             logger.debug "[MiniRecord] Creating Table #{table_name}" if logger
             unless dry_run
@@ -360,7 +360,7 @@ module MiniRecord
           end
 
           # Group Destructive Actions
-          if MiniRecord.configuration.destructive == true and connection.tables.include?(table_name)
+          if MiniRecord.configuration.destructive == true and connection.data_sources.include?(table_name)
 
             # Rename fields
             rename_fields.each do |old_name, new_name|
@@ -405,7 +405,7 @@ module MiniRecord
 
           end
 
-          if connection.tables.include?(table_name)
+          if connection.data_sources.include?(table_name)
             # Add fields to db new to schema
             columns_to_add = fields.keys - fields_in_db.keys
             columns_to_add.each do |field|
