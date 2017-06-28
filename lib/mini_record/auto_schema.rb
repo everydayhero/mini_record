@@ -244,7 +244,11 @@ module MiniRecord
         # Ignore junk attributes that different versions of Rails include
         [:name, :limit, :precision, :scale, :default, :null].each do |att|
           if fields[field].respond_to? :members
-            value = fields[field].members.include?(att) ? fields[field][att] : nil
+            if fields[field].members.include?(att)
+              value = fields[field][att]
+            else
+              value = fields[field].options.fetch(att, nil)
+            end
           else
             value = fields[field][att]
           end
